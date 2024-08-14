@@ -1,3 +1,3 @@
-# homelab
+# Alp's Homelab
 
-This is my personal template collection. Here you'll find templates, and configurations for various tools, and technologies.
+This is my homelab documentation files. Here you'll find templates, configurations for various tools, and technologies.
