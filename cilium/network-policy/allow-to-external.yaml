@@ -1,0 +1,14 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "allow-to-external"
+  namespace: default
+spec:
+  endpointSelector:
+    {}
+  egress:
+  - toCIDR:
+    - 10.5.27.21/32
+  - toFQDNs:
+      - matchPattern: "*.google.com"
+      - matchName: "api.adobesign.com"

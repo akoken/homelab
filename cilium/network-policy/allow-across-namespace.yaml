@@ -1,0 +1,108 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "allow-across-namespace"
+specs:
+  - endpointSelector:
+      matchLabels: {}
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": default
+    ingress:
+    - fromEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": default
+  - endpointSelector:
+      matchLabels: {}
+    ingress:
+    - fromEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": vault
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": vault
+      toPorts:
+      - ports:
+        - port: "8200"
+          protocol: TCP
+        - port: "8201"
+          protocol: TCP
+  - endpointSelector:
+      matchLabels: {}
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": kube-system
+          "k8s-app": kube-dns
+      toPorts:
+      - ports:
+        - port: "53"
+          protocol: TCP
+        - port: "53"
+          protocol: UDP
+        - port: "9153"
+          protocol: TCP
+        rules:
+          dns:
+          - matchPattern: "*"
+    - toFQDNs:
+        - matchPattern: "*.*.svc"
+      #       - matchPattern: "*.*.svc.cluster.local."
+      toPorts:
+      - ports:
+        - port: "8200"
+          protocol: TCP
+        - port: "8201"
+          protocol: TCP
+        - port: "80"
+          protocol: TCP
+  - endpointSelector:
+      matchLabels: {}
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": redis
+          "app.kubernetes.io/name": redis
+      toPorts:
+      - ports:
+        - port: "6379"
+          protocol: TCP
+  - endpointSelector:
+      matchLabels: {}
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": observability
+          "app.kubernetes.io/name": jaeger
+      toPorts:
+      - ports:
+        - port: "4317"
+          protocol: TCP
+  - endpointSelector:
+      matchLabels: {}
+    ingress:
+    - fromEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": monitoring
+          "app.kubernetes.io/name": prometheus
+      toPorts:
+      - ports:
+        - port: "8080"
+          protocol: "TCP"
+        rules:
+          http:
+          - method: "GET"
+            path: "/metrics"
+  - endpointSelector:
+      matchLabels: {}
+    ingress:
+    - fromEntities:
+      - remote-node
+  - endpointSelector:
+      matchLabels:
+        "role": public
+    ingress:
+    - fromEntities:
+      - world
