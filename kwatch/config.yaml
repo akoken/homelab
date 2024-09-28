@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kwatch
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kwatch
+  namespace: kwatch
+data:
+  config.yaml: |
+    maxRecentLogLines: 20
+    ignoreFailedGracefulShutdown: true
+    alert:
+      teams:
+          webhook: <url>
+    namespaces:
+      - default
+    app:
+        clusterName: Staging
+        proxyURL: <proxy>
