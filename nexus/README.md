@@ -12,7 +12,7 @@ sudo keytool -genkeypair -keystore keystore.jks -storepass <password> -keypass <
 ```
 
 # Installation
-```yaml
+```bash
 # Run nexus container
 docker compose up -d
 
