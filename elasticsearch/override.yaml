@@ -1,0 +1,15 @@
+replicas: 1
+minimumMasterNodes: 1
+
+ingress:
+  enabled: false
+
+esJavaOpts: "-Xmx1g -Xms1g"
+
+resources:
+  requests:
+    cpu: "1000m"
+    memory: "2Gi"
+  limits:
+    cpu: "1000m"
+    memory: "2Gi"
