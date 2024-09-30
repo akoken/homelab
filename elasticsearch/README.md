@@ -39,6 +39,6 @@ resources:
 The following command installs only elasticsearch:
 
 ```bash
-helm -n observability upgrade --install es elastic/elasticsearch --create-namespace --version 8.5.1 -f override.yaml --set secret.password=P@ssW0rd
+helm -n elasticsearch upgrade --install es elastic/elasticsearch --create-namespace --version 8.5.1 -f override.yaml --set secret.password=P@ssW0rd
 ```
 > Do not forget to change the password!
