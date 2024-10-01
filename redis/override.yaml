@@ -1,0 +1,21 @@
+global:
+  redis:
+    password: SuperStrongPass123@
+
+image:
+    tag: 7.2.0-debian-11-r3
+
+sentinel:
+  enabled: true
+
+master:
+  persistence:
+    size: 4Gi
+
+replica:
+  replicaCount: 3
+  persistence:
+    size: 4Gi
+
+metrics:
+  enabled: true
