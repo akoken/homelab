@@ -1,0 +1,64 @@
+## Deploy a Prometheus instance
+##
+prometheus:
+  prometheusSpec:
+    additionalScrapeConfigs:
+      #- job_name: redis-exporter
+      # static_configs:
+      #   - targets: ['redis-metrics.redis:9121']
+      - job_name: "kubernetes-service-endpoints"
+
+        kubernetes_sd_configs:
+          - role: endpoints
+
+        relabel_configs:
+          - source_labels:
+              [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels:
+              [__meta_kubernetes_service_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels:
+              [
+                __address__,
+                __meta_kubernetes_service_annotation_prometheus_port,
+              ]
+            action: replace
+            target_label: __address__
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            action: replace
+            target_label: kubernetes_service
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: instance
+
+grafana:
+  env:
+    #HTTP_PROXY: <proxy>
+    #HTTPS_PROXY: <proxy>
+    NO_PROXY: locahost,.local,kube-prometheus-stack-prometheus.monitoring
+  grafana.ini:
+    server:
+      root_url: http://<server-fqdn>/grafana
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
+      nginx.ingress.kubernetes.io/use-regex: "true"
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - <server-fqdn>
+    path: /grafana/?(.*)
+  plugins:
+    - digrich-bubblechart-panel
+    - grafana-clock-panel
+    - grafana-piechart-panel
