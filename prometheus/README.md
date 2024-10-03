@@ -1,7 +1,6 @@
 # Prometheus
 
 ## Preparation
-Open your terminal and run the command down below, this will add all the repositories that we need for Prometheus:
 
 ```bash
 # Add Prometheus helm repo
