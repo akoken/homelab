@@ -8,9 +8,9 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
-  ingressClassName: nginx 
+  ingressClassName: nginx
   rules:
-    - host: argocd.prod.tr
+    - host: argocd.prod.com
       http:
         paths:
           - path: /
