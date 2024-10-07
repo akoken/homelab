@@ -61,5 +61,5 @@ ArgoCD API server runs both a gRPC(used by the CLI), as well as a HTTP/HTTPS ser
 
 ### Nginx Ingress
 ```bash
-kubectl apply -f .\prod\ingress-http.yaml -n argocd
+kubectl apply -f .\ingress-http.yaml -n argocd
 ```
